@@ -1,0 +1,7 @@
+- name: install staff
+  become: yes
+  package:
+    name: "{{ item }}"
+  with_items:
+    - epel-release
+    - java-1.8.0-openjdk-devel

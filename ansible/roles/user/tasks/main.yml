@@ -1,0 +1,29 @@
+---
+# tasks file for user
+
+- name: Make group
+  become: yes
+  group:
+    name: "{{user_group}}"
+    state: present
+
+- name: user for msg-service
+  become: yes
+  user:
+    name: "{{user_name}}"
+    group: "{{user_group}}"
+    append: yes
+
+- name: passwordless sudo
+  become: yes
+  lineinfile:
+    dest: "/etc/sudoers.d/{{user_name}}"
+    state: present
+    regexp: "^%{{ user_name }}"
+    line: "%{{ user_name }} ALL=(ALL) NOPASSWD: ALL"
+    create: yes
+
+#- name: Set up authorized keys for the deployer user
+#  authorized_key: user=deployer key="{{item}}"
+#  with_file:
+#    - /home/railsdev/.ssh/id_rsa.pub

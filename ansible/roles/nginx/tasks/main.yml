@@ -1,0 +1,24 @@
+- name: nginx
+  become: yes
+  package:
+    name: "nginx"
+
+- name: running
+  become: yes
+  systemd:
+    name: nginx.service
+    state: started
+    enabled: yes
+
+# just don't want to maintain selinux
+- name: Disable SELinux
+  become: yes
+  selinux:
+    state: disabled
+
+- name: Copy nginx-backend config
+  become: yes
+  template:
+    src: jenkins.conf
+    dest: /etc/nginx/conf.d/
+  notify: restart nginx

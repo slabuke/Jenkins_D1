@@ -1,0 +1,4 @@
+JENKINS_HOME="{{ jenkins_home }}"
+JENKINS_USER="{{ jenkins_user | default('jenkins') }}"
+JENKINS_JAVA_OPTIONS="{{ jenkins_java_opts }}"
+JENKINS_PORT="{{ jenkins_port }}"

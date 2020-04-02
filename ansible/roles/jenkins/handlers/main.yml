@@ -1,0 +1,18 @@
+- name: jenkins_start
+  become: yes
+  systemd:
+    name: jenkins.service
+    daemon_reload: yes
+    state: restarted
+
+- name: jenkins_fact
+  become: yes
+  copy:
+    content: >
+      {
+       "PORT": "{{ jenkins_port }}",
+       "USER_INIT": true,
+       "SERVICEUSER": "{{ jenkins_user }}",
+       "INSTALLATIONTIME": "{{ ansible_date_time.iso8601 }}"
+      }
+    dest: /etc/ansible/facts.d/jenkins.fact

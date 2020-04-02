@@ -1,0 +1,31 @@
+- hosts: localhost
+
+  tasks:
+  - name: Esure Ansible Facts Dir exists
+    become: yes
+    file: path=/etc/ansible/facts.d state=directory recurse=yes
+
+  roles:
+    - java
+    - role: jenkins
+      vars:
+        jenkins_link: "http://mirrors.jenkins.io/war-stable/latest/jenkins.war"
+        jenkins_war: "/usr/share/jenkins"
+        jenkins_home: "/opt/jenkins"
+        jenkins_config: "/etc/sysconfig"
+        jenkins_user: "jenkins"
+        jenkins_java_opts: "-Duser.home=/opt/jenkins \
+          -Djenkins.install.runSetupWizard=false \
+          -Djava.awt.headless=true -Dhudson.plugins.git.GitSCM.verbose=true \
+          -Dorg.apache.commons.jelly.tags.fmt.timeZone=Europe/London \
+          -Duser.timezone=Europe/London -Dhttps.protocols=TLSv1.2 \
+          -Dorg.eclipse.jetty.server.Request.maxFormContentSize=5000000 \
+          -Dhudson.plugins.parameterizedtrigger.ProjectSpecificParametersActionFactory.compatibility_mode=true \
+          -Dpermissive-script-security.enabled=true -XX:MaxMetaspaceSize=1g \
+          -XX:+CMSClassUnloadingEnabled -XX:+UseConcMarkSweepGC -XX:+DisableExplicitGC \
+          -Xms1000m -Xmx3000m -Dcom.sun.management.jmxremote.ssl=false"
+        jenkins_port: "8080"
+    - role: nginx
+      vars:
+        jenkins_dns: "jenkins.vnikifarau.playpit.net"
+        jenkins_port: "{{ hostvars['localhost']['jenkins_port'] }}"

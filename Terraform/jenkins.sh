@@ -11,6 +11,6 @@ yum update -y
 yum install epel-release -y
 yum install git -y
 yum install ansible -y
-git clone https://github.com/mitter91/jenkinsD1.git
-ansible-playbook ./jenkinsD1/ansible/jenkins.yml
+git clone http://github.com/slabuke/Jenkins_D1
+ansible-playbook ./Jenkins_D1/ansible/jenkins.yml
 echo "All Done"
